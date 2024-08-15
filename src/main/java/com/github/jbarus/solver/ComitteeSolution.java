@@ -5,14 +5,14 @@ import ai.timefold.solver.core.api.domain.solution.PlanningScore;
 import ai.timefold.solver.core.api.domain.solution.PlanningSolution;
 import ai.timefold.solver.core.api.domain.valuerange.ValueRangeProvider;
 import ai.timefold.solver.core.api.score.buildin.hardsoft.HardSoftScore;
-import com.github.jbarus.pojo.UniversityWorker;
+import com.github.jbarus.pojo.UniversityEmployee;
 
 import java.util.List;
 
 @PlanningSolution
 public class ComitteeSolution {
-    @ValueRangeProvider(id = "universityWorkerRange")
-    private List<UniversityWorker> universityWorkers;
+    @ValueRangeProvider(id = "universityEmployeeRange")
+    private List<UniversityEmployee> universityEmployees;
     @PlanningEntityCollectionProperty
     private List<Committee> committees;
     @PlanningScore
@@ -21,17 +21,17 @@ public class ComitteeSolution {
     public ComitteeSolution() {
     }
 
-    public ComitteeSolution(List<UniversityWorker> universityWorkers, List<Committee> committees) {
-        this.universityWorkers = universityWorkers;
+    public ComitteeSolution(List<UniversityEmployee> universityEmployees, List<Committee> committees) {
+        this.universityEmployees = universityEmployees;
         this.committees = committees;
     }
 
-    public List<UniversityWorker> getUniversityWorkers() {
-        return universityWorkers;
+    public List<UniversityEmployee> getUniversityEmployees() {
+        return universityEmployees;
     }
 
-    public void setUniversityWorkers(List<UniversityWorker> universityWorkers) {
-        this.universityWorkers = universityWorkers;
+    public void setUniversityEmployees(List<UniversityEmployee> universityEmployees) {
+        this.universityEmployees = universityEmployees;
     }
 
     public List<Committee> getCommittees() {

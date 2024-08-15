@@ -4,21 +4,18 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
-public class UniversityWorker {
+public class UniversityEmployee {
     private UUID id;
     private String firstName;
     private String secondName;
     private boolean isHabilitated;
     private List<LocalDateTime> availableTimeSlots;
 
-    //TODO preferred colleagues
-    // private List<UniversityWorker>?????
-
     //TODO not preferred colleagues
-    // private List<UniversityWorker>
+    // private List<UniversityEmployee>
 
 
-    public UniversityWorker(UUID id, String firstName, String secondName, boolean isHabilitated) {
+    public UniversityEmployee(UUID id, String firstName, String secondName, boolean isHabilitated) {
         this.id = id;
         this.firstName = firstName;
         this.secondName = secondName;
@@ -72,7 +69,7 @@ public class UniversityWorker {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        UniversityWorker that = (UniversityWorker) o;
+        UniversityEmployee that = (UniversityEmployee) o;
 
         if (isHabilitated != that.isHabilitated) return false;
         if (!firstName.equals(that.firstName)) return false;
@@ -89,7 +86,7 @@ public class UniversityWorker {
 
     @Override
     public String toString() {
-        return "UniversityWorker{" +
+        return "UniversityEmployee{" +
                 "id=" + id +
                 ", firstName='" + firstName + '\'' +
                 ", secondName='" + secondName + '\'' +

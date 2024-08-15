@@ -3,7 +3,7 @@ package com.github.jbarus.solver;
 import ai.timefold.solver.core.api.domain.entity.PlanningEntity;
 import ai.timefold.solver.core.api.domain.lookup.PlanningId;
 import ai.timefold.solver.core.api.domain.variable.PlanningListVariable;
-import com.github.jbarus.pojo.UniversityWorker;
+import com.github.jbarus.pojo.UniversityEmployee;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,8 +13,8 @@ import java.util.UUID;
 public class Committee {
     @PlanningId
     private UUID id;
-    @PlanningListVariable(valueRangeProviderRefs = "universityWorkerRange", allowsUnassignedValues = true)
-    List<UniversityWorker> universityWorkers = new ArrayList<>();
+    @PlanningListVariable(valueRangeProviderRefs = "universityEmployeeRange", allowsUnassignedValues = true)
+    List<UniversityEmployee> universityEmployees = new ArrayList<>();
 
     public Committee() {
     }
@@ -23,8 +23,8 @@ public class Committee {
         this.id = id;
     }
 
-    public Committee(List<UniversityWorker> universityWorkers) {
-        this.universityWorkers = universityWorkers;
+    public Committee(List<UniversityEmployee> universityEmployees) {
+        this.universityEmployees = universityEmployees;
     }
 
     public UUID getId() {
@@ -35,19 +35,19 @@ public class Committee {
         this.id = id;
     }
 
-    public List<UniversityWorker> getUniversityWorkers() {
-        return universityWorkers;
+    public List<UniversityEmployee> getUniversityEmployees() {
+        return universityEmployees;
     }
 
-    public void setUniversityWorkers(List<UniversityWorker> universityWorkers) {
-        this.universityWorkers = universityWorkers;
+    public void setUniversityEmployees(List<UniversityEmployee> universityEmployees) {
+        this.universityEmployees = universityEmployees;
     }
 
     @Override
     public String toString() {
         return "Committee{" +
                 "id=" + id +
-                ", universityWorkers=" + universityWorkers +
+                ", universityEmployees=" + universityEmployees +
                 '}';
     }
 }
