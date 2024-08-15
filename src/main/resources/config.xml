@@ -1,0 +1,10 @@
+<solver>
+    <solutionClass>com.github.jbarus.solver.ComitteeSolution</solutionClass>
+    <entityClass>com.github.jbarus.solver.Committee</entityClass>
+    <scoreDirectorFactory>
+        <constraintProviderClass>com.github.jbarus.solver.ComitteeSolutionConstraintProvider</constraintProviderClass>
+    </scoreDirectorFactory>
+    <termination>
+        <secondsSpentLimit>30</secondsSpentLimit>
+    </termination>
+</solver>

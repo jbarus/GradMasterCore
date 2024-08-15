@@ -8,7 +8,7 @@ public class UniversityWorker {
     private UUID id;
     private String firstName;
     private String secondName;
-    private String isHabilitated;
+    private boolean isHabilitated;
     private List<LocalDateTime> availableTimeSlots;
 
     //TODO preferred colleagues
@@ -18,13 +18,14 @@ public class UniversityWorker {
     // private List<UniversityWorker>
 
 
-    public UniversityWorker(UUID id, String firstName, String secondName, String isHabilitated, List<LocalDateTime> availableTimeSlots) {
+    public UniversityWorker(UUID id, String firstName, String secondName, boolean isHabilitated) {
         this.id = id;
         this.firstName = firstName;
         this.secondName = secondName;
         this.isHabilitated = isHabilitated;
-        this.availableTimeSlots = availableTimeSlots;
     }
+
+
 
     public UUID getId() {
         return id;
@@ -50,11 +51,11 @@ public class UniversityWorker {
         this.secondName = secondName;
     }
 
-    public String getIsHabilitated() {
+    public boolean getIsHabilitated() {
         return isHabilitated;
     }
 
-    public void setIsHabilitated(String isHabilitated) {
+    public void setIsHabilitated(boolean isHabilitated) {
         this.isHabilitated = isHabilitated;
     }
 
@@ -73,16 +74,26 @@ public class UniversityWorker {
 
         UniversityWorker that = (UniversityWorker) o;
 
+        if (isHabilitated != that.isHabilitated) return false;
         if (!firstName.equals(that.firstName)) return false;
-        if (!secondName.equals(that.secondName)) return false;
-        return isHabilitated.equals(that.isHabilitated);
+        return secondName.equals(that.secondName);
     }
 
     @Override
     public int hashCode() {
         int result = firstName.hashCode();
         result = 31 * result + secondName.hashCode();
-        result = 31 * result + isHabilitated.hashCode();
+        result = 31 * result + (isHabilitated ? 1 : 0);
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "UniversityWorker{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", secondName='" + secondName + '\'' +
+                ", isHabilitated='" + isHabilitated + '\'' +
+                '}';
     }
 }
