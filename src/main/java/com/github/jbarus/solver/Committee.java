@@ -23,7 +23,8 @@ public class Committee {
         this.id = id;
     }
 
-    public Committee(List<UniversityEmployee> universityEmployees) {
+    public Committee(UUID id, List<UniversityEmployee> universityEmployees) {
+        this.id = id;
         this.universityEmployees = universityEmployees;
     }
 

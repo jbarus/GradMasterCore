@@ -1,24 +1,17 @@
 package com.github.jbarus.pojo;
 
-import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
-public class UniversityEmployee {
+public class Student {
     private UUID id;
     private String firstName;
     private String secondName;
-    private boolean isHabilitated;
-    private List<LocalDateTime> availableTimeSlots;
 
-    public UniversityEmployee(UUID id, String firstName, String secondName, boolean isHabilitated) {
+    public Student(UUID id, String firstName, String secondName) {
         this.id = id;
         this.firstName = firstName;
         this.secondName = secondName;
-        this.isHabilitated = isHabilitated;
     }
-
-
 
     public UUID getId() {
         return id;
@@ -44,49 +37,28 @@ public class UniversityEmployee {
         this.secondName = secondName;
     }
 
-    public boolean getIsHabilitated() {
-        return isHabilitated;
-    }
-
-    public void setIsHabilitated(boolean isHabilitated) {
-        this.isHabilitated = isHabilitated;
-    }
-
-    public List<LocalDateTime> getAvailableTimeSlots() {
-        return availableTimeSlots;
-    }
-
-    public void setAvailableTimeSlots(List<LocalDateTime> availableTimeSlots) {
-        this.availableTimeSlots = availableTimeSlots;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        UniversityEmployee that = (UniversityEmployee) o;
-
-        if (isHabilitated != that.isHabilitated) return false;
-        if (!firstName.equals(that.firstName)) return false;
-        return secondName.equals(that.secondName);
+        Student student = (Student) o;
+        return firstName.equals(student.firstName) && secondName.equals(student.secondName);
     }
 
     @Override
     public int hashCode() {
         int result = firstName.hashCode();
         result = 31 * result + secondName.hashCode();
-        result = 31 * result + (isHabilitated ? 1 : 0);
         return result;
     }
 
     @Override
     public String toString() {
-        return "UniversityEmployee{" +
+        return "Student{" +
                 "id=" + id +
                 ", firstName='" + firstName + '\'' +
                 ", secondName='" + secondName + '\'' +
-                ", isHabilitated='" + isHabilitated + '\'' +
                 '}';
     }
 }

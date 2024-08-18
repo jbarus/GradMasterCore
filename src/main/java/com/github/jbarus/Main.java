@@ -2,6 +2,7 @@ package com.github.jbarus;
 
 import ai.timefold.solver.core.api.solver.Solver;
 import ai.timefold.solver.core.api.solver.SolverFactory;
+import com.github.jbarus.pojo.Student;
 import com.github.jbarus.pojo.UniversityEmployee;
 import com.github.jbarus.solver.ComitteeSolution;
 import com.github.jbarus.solver.Committee;
@@ -34,6 +35,35 @@ public class Main {
                 new UniversityEmployee(UUID.randomUUID(),"Haily", "Witch", false),
                 new UniversityEmployee(UUID.randomUUID(),"Adore", "Anchor",  true)
         );
+
+        List<Student> students = List.of(
+                new Student(UUID.randomUUID(), "Chrissie", "Dudek"),
+                new Student(UUID.randomUUID(), "Abbott", "Higford"),
+                new Student(UUID.randomUUID(), "Romy", "Chainey"),
+                new Student(UUID.randomUUID(), "Tye", "Niles"),
+                new Student(UUID.randomUUID(), "Charita", "Hulles"),
+                new Student(UUID.randomUUID(), "Andreana", "Mayston"),
+                new Student(UUID.randomUUID(), "Delora", "Hutchens"),
+                new Student(UUID.randomUUID(), "Major", "Ventam"),
+                new Student(UUID.randomUUID(), "Gaye", "Malenoir"),
+                new Student(UUID.randomUUID(), "Lauritz", "Onians"),
+                new Student(UUID.randomUUID(), "Drusie", "Sandeford"),
+                new Student(UUID.randomUUID(), "Micheil", "Beakes"),
+                new Student(UUID.randomUUID(), "Hilton", "Senyard"),
+                new Student(UUID.randomUUID(), "Minerva", "Scoyne"),
+                new Student(UUID.randomUUID(), "Jamie", "Frick"),
+                new Student(UUID.randomUUID(), "Marvin", "Buxy"),
+                new Student(UUID.randomUUID(), "Adriano", "Causer"),
+                new Student(UUID.randomUUID(), "Natalya", "Bairstow"),
+                new Student(UUID.randomUUID(), "Emalee", "Ebertz"),
+                new Student(UUID.randomUUID(), "Angy", "Jeduch"),
+                new Student(UUID.randomUUID(), "Emmye", "Murrells"),
+                new Student(UUID.randomUUID(), "Larina", "Pratchett"),
+                new Student(UUID.randomUUID(), "Selig", "Panner"),
+                new Student(UUID.randomUUID(), "Crystal", "Bouch"),
+                new Student(UUID.randomUUID(), "Israel", "Matthews")
+        );
+
         positiveCorrelation.addRelation(universityEmployees.get(0), universityEmployees.get(4)); // Alanson and Heather
         positiveCorrelation.addRelation(universityEmployees.get(1), universityEmployees.get(5)); // Leighton and Julianne
         positiveCorrelation.addRelation(universityEmployees.get(2), universityEmployees.get(9)); // Abby and Adore
