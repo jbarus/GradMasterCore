@@ -1,63 +1,34 @@
 package com.github.jbarus.pojo;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+@Getter
+@Setter
 public class UniversityEmployee {
     private UUID id;
     private String firstName;
     private String secondName;
     private boolean isHabilitated;
-    private List<LocalDateTime> availableTimeSlots;
+    private LocalTime timeslotStart;
+    private LocalTime timeslotEnd;
+    private int preferredCommitteeDuration;
+    private List<Student> reviewedStudents = new ArrayList<>();
 
-    public UniversityEmployee(UUID id, String firstName, String secondName, boolean isHabilitated) {
-        this.id = id;
+    public UniversityEmployee(String firstName, String secondName, boolean isHabilitated, LocalTime timeslotStart, LocalTime timeslotEnd, int preferredCommitteeDuration) {
+        this.id = UUID.randomUUID();
         this.firstName = firstName;
         this.secondName = secondName;
         this.isHabilitated = isHabilitated;
-    }
-
-
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getSecondName() {
-        return secondName;
-    }
-
-    public void setSecondName(String secondName) {
-        this.secondName = secondName;
-    }
-
-    public boolean getIsHabilitated() {
-        return isHabilitated;
-    }
-
-    public void setIsHabilitated(boolean isHabilitated) {
-        this.isHabilitated = isHabilitated;
-    }
-
-    public List<LocalDateTime> getAvailableTimeSlots() {
-        return availableTimeSlots;
-    }
-
-    public void setAvailableTimeSlots(List<LocalDateTime> availableTimeSlots) {
-        this.availableTimeSlots = availableTimeSlots;
+        this.timeslotStart = timeslotStart;
+        this.timeslotEnd = timeslotEnd;
+        this.preferredCommitteeDuration = preferredCommitteeDuration;
     }
 
     @Override

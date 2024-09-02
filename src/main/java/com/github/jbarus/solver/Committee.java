@@ -17,6 +17,7 @@ public class Committee {
     List<UniversityEmployee> universityEmployees = new ArrayList<>();
 
     public Committee() {
+        this.id = UUID.randomUUID();
     }
 
     public Committee(UUID id) {

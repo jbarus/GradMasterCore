@@ -5,6 +5,7 @@ import ai.timefold.solver.core.api.domain.solution.PlanningScore;
 import ai.timefold.solver.core.api.domain.solution.PlanningSolution;
 import ai.timefold.solver.core.api.domain.valuerange.ValueRangeProvider;
 import ai.timefold.solver.core.api.score.buildin.hardsoft.HardSoftScore;
+import com.github.jbarus.pojo.Student;
 import com.github.jbarus.pojo.UniversityEmployee;
 
 import java.util.List;
@@ -17,6 +18,8 @@ public class ComitteeSolution {
     private List<Committee> committees;
     @PlanningScore
     private HardSoftScore score;
+
+    private List<Student> unassignedStudents;
 
     public ComitteeSolution() {
     }
@@ -48,5 +51,13 @@ public class ComitteeSolution {
 
     public void setScore(HardSoftScore score) {
         this.score = score;
+    }
+
+    public List<Student> getUnassignedStudents() {
+        return unassignedStudents;
+    }
+
+    public void setUnassignedStudents(List<Student> unassignedStudents) {
+        this.unassignedStudents = unassignedStudents;
     }
 }

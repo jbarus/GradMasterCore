@@ -26,7 +26,7 @@ public class ComitteeSolutionConstraintProvider implements ConstraintProvider {
 
     private Constraint onlyOneHabilitatedPerComittee(ConstraintFactory constraintFactory) {
         return constraintFactory.forEach(Committee.class)
-                .filter(committee -> committee.getUniversityEmployees().stream().noneMatch(UniversityEmployee::getIsHabilitated))
+                .filter(committee -> committee.getUniversityEmployees().stream().noneMatch(UniversityEmployee::isHabilitated))
                 .penalize(ONE_HARD).asConstraint("Only one habilitated per comittee");
     }
 
