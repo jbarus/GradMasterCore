@@ -3,6 +3,7 @@ package com.github.jbarus.pojo;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -29,6 +30,10 @@ public class UniversityEmployee {
         this.timeslotStart = timeslotStart;
         this.timeslotEnd = timeslotEnd;
         this.preferredCommitteeDuration = preferredCommitteeDuration;
+    }
+
+    public Duration getTimeslotDuration() {
+        return Duration.between(timeslotStart, timeslotEnd);
     }
 
     @Override

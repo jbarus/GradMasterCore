@@ -36,7 +36,6 @@ public class Main {
         List<List<String>> professors = DataLoader.loadData("C:\\Users\\Jakub\\Desktop\\GradMaster\\Materiały\\Profesorowie.xlsx",universityEmployeesColumns,List.of("NAZWISKO", "IMIE", "CZY_HABILITOWANY", "POCZATEK_DOSTEPNOSCI", "KONIEC_DOSTEPNOSCI", "DLUGOSC_KOMISJI"),hashMap2);
 
         ComitteeSolution unsolved = PrepareCommittee.prepareCommittee(professors, students);
-        System.out.println("Cos");
 
         SolverFactory<ComitteeSolution> solverFactory = SolverFactory.createFromXmlResource(
                 "config.xml");

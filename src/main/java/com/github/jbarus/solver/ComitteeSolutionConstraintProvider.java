@@ -15,7 +15,8 @@ public class ComitteeSolutionConstraintProvider implements ConstraintProvider {
                 only3UniversityEmployeesPerComittee(constraintFactory),
                 onlyOneHabilitatedPerComittee(constraintFactory),
                 prefferLikedWorkersInComittee(constraintFactory),
-                avoidDislikedWorkersInComittee(constraintFactory)
+                avoidDislikedWorkersInComittee(constraintFactory),
+                shouldNotExceedTimeslot(constraintFactory)
         };
     }
 
@@ -50,5 +51,9 @@ public class ComitteeSolutionConstraintProvider implements ConstraintProvider {
                         }
                 ))
                 .penalize(ONE_HARD).asConstraint("University employees who dislike each other shouldn’t be on the same committee.");
+    }
+
+    private Constraint shouldNotExceedTimeslot(ConstraintFactory constraintFactory) {
+        return constraintFactory.forEach(Committee.class).filter(committee -> !committee.canStudentsFitInShortestSlot()).penalize(ONE_HARD).asConstraint("Should not exceed times slot");
     }
 }
