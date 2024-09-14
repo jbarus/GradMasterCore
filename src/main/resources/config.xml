@@ -5,6 +5,6 @@
         <constraintProviderClass>com.github.jbarus.solver.ComitteeSolutionConstraintProvider</constraintProviderClass>
     </scoreDirectorFactory>
     <termination>
-        <secondsSpentLimit>30</secondsSpentLimit>
+        <secondsSpentLimit>20</secondsSpentLimit>
     </termination>
 </solver>

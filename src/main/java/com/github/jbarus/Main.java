@@ -49,9 +49,9 @@ public class Main {
         for (Committee committee : solved.getCommittees()) {
             System.out.println("Committee ID: " + committee.getId());
             System.out.println("Assigned University Employees:");
-            for (UniversityEmployee employee : committee.getUniversityEmployees()) {
-                System.out.println("  - " + employee + " " + employee.getReviewedStudents());
-            }
+            System.out.println("  - " + committee.getFirstUniversityEmployee() + " " + committee.getFirstUniversityEmployee().getReviewedStudents());
+            System.out.println("  - " + committee.getSecondUniversityEmployee() + " " + committee.getSecondUniversityEmployee().getReviewedStudents());
+            System.out.println("  - " + committee.getThirdUniversityEmployee() + " " + committee.getThirdUniversityEmployee().getReviewedStudents());
             System.out.println();
         }
 
