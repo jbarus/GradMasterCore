@@ -1,59 +1,95 @@
 package com.github.jbarus.solver;
 
-import ai.timefold.solver.core.api.score.stream.Constraint;
-import ai.timefold.solver.core.api.score.stream.ConstraintFactory;
-import ai.timefold.solver.core.api.score.stream.ConstraintProvider;
+import ai.timefold.solver.core.api.score.buildin.hardsoft.HardSoftScore;
+import ai.timefold.solver.core.api.score.stream.*;
 import com.github.jbarus.Main;
-import com.github.jbarus.pojo.UniversityEmployee;
 
-import static ai.timefold.solver.core.api.score.buildin.hardsoft.HardSoftScore.ONE_HARD;
+import java.time.Duration;
+import java.time.LocalTime;
+
+import static ai.timefold.solver.core.api.score.stream.ConstraintCollectors.count;
 
 public class ComitteeSolutionConstraintProvider implements ConstraintProvider {
     @Override
     public Constraint[] defineConstraints(ConstraintFactory constraintFactory) {
         return new Constraint[]{
-                only3UniversityEmployeesPerComittee(constraintFactory),
-                onlyOneHabilitatedPerComittee(constraintFactory),
-                prefferLikedWorkersInComittee(constraintFactory),
-                avoidDislikedWorkersInComittee(constraintFactory),
-                shouldNotExceedTimeslot(constraintFactory)
+                limitProfessorsInCommittee(constraintFactory),
+                atLeastOneHabilitatedProfessor(constraintFactory),
+                avoidDislikedWorkersInCommittee(constraintFactory),
+                preferLikedWorkersInCommittee(constraintFactory),
+                validateCommitteeTimeAndStudentLoad(constraintFactory)
         };
     }
 
-    private Constraint only3UniversityEmployeesPerComittee(ConstraintFactory constraintFactory) {
-        return constraintFactory
-                .forEach(Committee.class).filter(committee -> committee.getUniversityEmployees().size() != 3).penalize(ONE_HARD).asConstraint("Only 3 university workers per comittee");
+    private Constraint limitProfessorsInCommittee(ConstraintFactory constraintFactory) {
+        return constraintFactory.forEach(CommitteeEmployeeAssignment.class)
+                .groupBy(CommitteeEmployeeAssignment::getCommittee,
+                        count())
+                .filter((committee, count) -> count > 3)
+                .penalize(HardSoftScore.ONE_HARD, (committee, count) -> count - 3)
+                .asConstraint("Max 3 professors per committee");
     }
 
-    private Constraint onlyOneHabilitatedPerComittee(ConstraintFactory constraintFactory) {
-        return constraintFactory.forEach(Committee.class)
-                .filter(committee -> committee.getUniversityEmployees().stream().noneMatch(UniversityEmployee::isHabilitated))
-                .penalize(ONE_HARD).asConstraint("Only one habilitated per comittee");
+    private Constraint atLeastOneHabilitatedProfessor(ConstraintFactory constraintFactory) {
+        return constraintFactory.forEach(CommitteeEmployeeAssignment.class)
+                .filter(assignment -> !assignment.getUniversityEmployees().isHabilitated())
+                .groupBy(CommitteeEmployeeAssignment::getCommittee, count())
+                .filter((assignment, count) -> count > 2)
+                .penalize(HardSoftScore.ONE_HARD, (committee, count) -> count - 2)
+                .asConstraint("At least one habilitated professor per committee");
     }
 
-    private Constraint prefferLikedWorkersInComittee(ConstraintFactory constraintFactory) {
-        return constraintFactory.forEach(Committee.class)
-                .filter(committee -> committee.getUniversityEmployees().stream().anyMatch(
-                        worker ->{
-                            UniversityEmployee preferredWorker = Main.positiveCorrelation.getRelation(worker);
-                            return preferredWorker != null && !committee.getUniversityEmployees().contains(preferredWorker);
-                        }
-                        ))
-                .penalize(ONE_HARD).asConstraint("University employees who like each other should be on the same committee.");
+    private Constraint avoidDislikedWorkersInCommittee(ConstraintFactory constraintFactory) {
+        return constraintFactory.forEach(CommitteeEmployeeAssignment.class)
+                .join(CommitteeEmployeeAssignment.class,
+                        Joiners.equal(CommitteeEmployeeAssignment::getCommittee))
+                .filter((assignment1, assignment2) ->
+                        Main.negativeCorrelation.containsRelation(assignment1.getUniversityEmployees(), assignment2.getUniversityEmployees()))
+                .penalize( HardSoftScore.ONE_HARD).asConstraint("University employees who dislike each other shouldn’t be on the same committee.");
     }
 
-    private Constraint avoidDislikedWorkersInComittee(ConstraintFactory constraintFactory) {
-        return constraintFactory.forEach(Committee.class)
-                .filter(committee -> committee.getUniversityEmployees().stream().anyMatch(
-                        worker ->{
-                            UniversityEmployee preferredWorker = Main.negativeCorrelation.getRelation(worker);
-                            return preferredWorker != null && committee.getUniversityEmployees().contains(preferredWorker);
-                        }
-                ))
-                .penalize(ONE_HARD).asConstraint("University employees who dislike each other shouldn’t be on the same committee.");
+    private Constraint preferLikedWorkersInCommittee(ConstraintFactory constraintFactory) {
+        return constraintFactory.forEach(CommitteeEmployeeAssignment.class)
+                .join(CommitteeEmployeeAssignment.class,
+                        Joiners.equal(CommitteeEmployeeAssignment::getCommittee))
+                .filter((assignment1, assignment2) ->
+                        Main.positiveCorrelation.containsRelation(assignment1.getUniversityEmployees(), assignment2.getUniversityEmployees()))
+                .reward( HardSoftScore.ONE_HARD).asConstraint("University employees who like each other should be on the same committee.");
     }
 
-    private Constraint shouldNotExceedTimeslot(ConstraintFactory constraintFactory) {
-        return constraintFactory.forEach(Committee.class).filter(committee -> !committee.canStudentsFitInShortestSlot()).penalize(ONE_HARD).asConstraint("Should not exceed times slot");
+    private Constraint validateCommitteeTimeAndStudentLoad(ConstraintFactory constraintFactory) {
+        return constraintFactory.forEach(CommitteeEmployeeAssignment.class)
+                        .groupBy(
+                                CommitteeEmployeeAssignment::getCommittee,
+                                ConstraintCollectors.toList()
+                        )
+                        .penalize(
+                        HardSoftScore.ONE_HARD,
+                        (committee, assignments) -> {
+                            long studentCount = assignments.stream()
+                                    .flatMap(a -> a.getUniversityEmployees().getReviewedStudents().stream())
+                                    .distinct()
+                                    .count();
+
+                            int maxPreferredDuration = assignments.stream()
+                                    .mapToInt(a -> a.getUniversityEmployees().getPreferredCommitteeDuration())
+                                    .max()
+                                    .orElse(0);
+
+                            LocalTime latestStart = assignments.stream()
+                                    .map(a -> a.getUniversityEmployees().getTimeslotStart())
+                                    .max(LocalTime::compareTo)
+                                    .orElse(LocalTime.MIN);
+
+                            LocalTime earliestEnd = assignments.stream()
+                                    .map(a -> a.getUniversityEmployees().getTimeslotEnd())
+                                    .min(LocalTime::compareTo)
+                                    .orElse(LocalTime.MAX);
+
+                            long availableMinutes = Duration.between(latestStart, earliestEnd).toMinutes();
+
+                            long excessMinutes = studentCount * maxPreferredDuration - availableMinutes;
+                            return (int) Math.max(excessMinutes, 0);
+                        }).asConstraint("Penalty for exceeding time constraints");
     }
 }

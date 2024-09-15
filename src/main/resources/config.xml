@@ -1,10 +1,10 @@
 <solver>
     <solutionClass>com.github.jbarus.solver.ComitteeSolution</solutionClass>
-    <entityClass>com.github.jbarus.solver.Committee</entityClass>
+    <entityClass>com.github.jbarus.solver.CommitteeEmployeeAssignment</entityClass>
     <scoreDirectorFactory>
         <constraintProviderClass>com.github.jbarus.solver.ComitteeSolutionConstraintProvider</constraintProviderClass>
     </scoreDirectorFactory>
     <termination>
-        <secondsSpentLimit>30</secondsSpentLimit>
+        <secondsSpentLimit>10</secondsSpentLimit>
     </termination>
 </solver>

@@ -5,17 +5,22 @@ import ai.timefold.solver.core.api.domain.solution.PlanningScore;
 import ai.timefold.solver.core.api.domain.solution.PlanningSolution;
 import ai.timefold.solver.core.api.domain.valuerange.ValueRangeProvider;
 import ai.timefold.solver.core.api.score.buildin.hardsoft.HardSoftScore;
+import com.github.jbarus.pojo.Committee;
 import com.github.jbarus.pojo.Student;
 import com.github.jbarus.pojo.UniversityEmployee;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 
 @PlanningSolution
+@Getter
+@Setter
 public class ComitteeSolution {
-    @ValueRangeProvider(id = "universityEmployeeRange")
-    private List<UniversityEmployee> universityEmployees;
-    @PlanningEntityCollectionProperty
+    @ValueRangeProvider(id = "committeeRange")
     private List<Committee> committees;
+    @PlanningEntityCollectionProperty
+    private List<CommitteeEmployeeAssignment> committeeEmployeeAssignments;
     @PlanningScore
     private HardSoftScore score;
 
@@ -24,40 +29,9 @@ public class ComitteeSolution {
     public ComitteeSolution() {
     }
 
-    public ComitteeSolution(List<UniversityEmployee> universityEmployees, List<Committee> committees) {
-        this.universityEmployees = universityEmployees;
+    public ComitteeSolution(List<Committee> committees, List<CommitteeEmployeeAssignment> committeeEmployeeAssignments) {
         this.committees = committees;
+        this.committeeEmployeeAssignments = committeeEmployeeAssignments;
     }
 
-    public List<UniversityEmployee> getUniversityEmployees() {
-        return universityEmployees;
-    }
-
-    public void setUniversityEmployees(List<UniversityEmployee> universityEmployees) {
-        this.universityEmployees = universityEmployees;
-    }
-
-    public List<Committee> getCommittees() {
-        return committees;
-    }
-
-    public void setCommittees(List<Committee> committees) {
-        this.committees = committees;
-    }
-
-    public HardSoftScore getScore() {
-        return score;
-    }
-
-    public void setScore(HardSoftScore score) {
-        this.score = score;
-    }
-
-    public List<Student> getUnassignedStudents() {
-        return unassignedStudents;
-    }
-
-    public void setUnassignedStudents(List<Student> unassignedStudents) {
-        this.unassignedStudents = unassignedStudents;
-    }
 }

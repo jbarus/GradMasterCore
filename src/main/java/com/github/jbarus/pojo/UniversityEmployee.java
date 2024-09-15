@@ -36,6 +36,10 @@ public class UniversityEmployee {
         return Duration.between(timeslotStart, timeslotEnd);
     }
 
+    public int getTotalReviewTime() {
+        return reviewedStudents.size() * preferredCommitteeDuration;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

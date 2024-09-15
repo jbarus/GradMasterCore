@@ -16,7 +16,10 @@ public class CorrelationMap<T> {
     }
 
     public boolean containsRelation(T obj1, T obj2) {
-        return map.get(obj1).equals(obj2);
+        if(map.containsKey(obj1) && map.containsKey(obj2)) {
+            return map.get(obj1).equals(obj2);
+        }
+        return false;
     }
 
     public T getRelation(T obj) {

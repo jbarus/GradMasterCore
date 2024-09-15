@@ -31,10 +31,8 @@ public class DataLoader {
     private static List<List<String>> loadFromXlsx(XSSFSheet sheet, List<String> columnList, List<String> columnNames, HashMap<String, String> rowRange) {
         //Get column indexes in wanted order
         List<Integer> columnIndexes = getColumnIndexes(sheet.getRow(0), columnList, columnNames);
-        //TODO Za dużo rowIndexes i nie wszystkie
         //Get row indexes
         List<Integer> rowIndexes = getRowIndexes(sheet, columnList, rowRange);
-
         //Load data
         List<List<String>> data = new ArrayList<>();
 

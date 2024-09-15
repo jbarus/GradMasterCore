@@ -1,9 +1,10 @@
 package com.github.jbarus.utils;
 
+import com.github.jbarus.pojo.Committee;
 import com.github.jbarus.pojo.Student;
 import com.github.jbarus.pojo.UniversityEmployee;
 import com.github.jbarus.solver.ComitteeSolution;
-import com.github.jbarus.solver.Committee;
+import com.github.jbarus.solver.CommitteeEmployeeAssignment;
 
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -20,8 +21,8 @@ public class PrepareCommittee {
                         entry.get(1),
                         entry.get(0),
                         convertStringToBoolean(entry.get(2)),
-                        LocalTime.parse(entry.get(3), DateTimeFormatter.ofPattern("H:mm:ss a")),
-                        LocalTime.parse(entry.get(4), DateTimeFormatter.ofPattern("H:mm:ss a")),
+                        LocalTime.parse(entry.get(3), DateTimeFormatter.ofPattern("h:mm:ss a")),
+                        LocalTime.parse(entry.get(4), DateTimeFormatter.ofPattern("h:mm:ss a")),
                         Integer.parseInt(entry.get(5)))).collect(Collectors.toCollection(ArrayList::new));
 
         HashMap<String, List<Student>> professorToStudentsMap = students.stream()
@@ -44,12 +45,18 @@ public class PrepareCommittee {
             unallocatedStudents.addAll(entry.getValue());
         }
         ComitteeSolution comitteeSolution = new ComitteeSolution();
-        List<Committee> committeeList = new ArrayList<>();
-        for (int i = 0; i < universityEmployeesObjects.size() / 3; i++) {
-            committeeList.add(new Committee());
+        List<CommitteeEmployeeAssignment> committeeEmployeeAssignmentList = new ArrayList<>();
+        for (UniversityEmployee universityEmployeesObject : universityEmployeesObjects) {
+            CommitteeEmployeeAssignment committeeEmployeeAssignment = new CommitteeEmployeeAssignment();
+            committeeEmployeeAssignment.setUniversityEmployees(universityEmployeesObject);
+            committeeEmployeeAssignmentList.add(committeeEmployeeAssignment);
         }
-        comitteeSolution.setCommittees(committeeList);
-        comitteeSolution.setUniversityEmployees(universityEmployeesObjects);
+        List<Committee>committees = new ArrayList<>();
+        for (int i = 0; i < universityEmployeesObjects.size()/3; i++) {
+            committees.add(new Committee("Committee " + i));
+        }
+        comitteeSolution.setCommittees(committees);
+        comitteeSolution.setCommitteeEmployeeAssignments(committeeEmployeeAssignmentList);
         comitteeSolution.setUnassignedStudents(unallocatedStudents);
         return comitteeSolution;
     }

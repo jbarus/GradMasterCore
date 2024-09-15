@@ -2,9 +2,11 @@ package com.github.jbarus;
 
 import ai.timefold.solver.core.api.solver.Solver;
 import ai.timefold.solver.core.api.solver.SolverFactory;
+import com.github.jbarus.pojo.Committee;
+import com.github.jbarus.pojo.Student;
 import com.github.jbarus.pojo.UniversityEmployee;
 import com.github.jbarus.solver.ComitteeSolution;
-import com.github.jbarus.solver.Committee;
+import com.github.jbarus.solver.CommitteeEmployeeAssignment;
 import com.github.jbarus.structures.CorrelationMap;
 import com.github.jbarus.utils.DataLoader;
 import com.github.jbarus.utils.PrepareCommittee;
@@ -36,6 +38,19 @@ public class Main {
         List<List<String>> professors = DataLoader.loadData("C:\\Users\\Jakub\\Desktop\\GradMaster\\Materiały\\Profesorowie.xlsx",universityEmployeesColumns,List.of("NAZWISKO", "IMIE", "CZY_HABILITOWANY", "POCZATEK_DOSTEPNOSCI", "KONIEC_DOSTEPNOSCI", "DLUGOSC_KOMISJI"),hashMap2);
 
         ComitteeSolution unsolved = PrepareCommittee.prepareCommittee(professors, students);
+        negativeCorrelation.addRelation(unsolved.getCommitteeEmployeeAssignments().get(0).getUniversityEmployees(),
+                                        unsolved.getCommitteeEmployeeAssignments().get(1).getUniversityEmployees());
+        negativeCorrelation.addRelation(unsolved.getCommitteeEmployeeAssignments().get(6).getUniversityEmployees(),
+                                        unsolved.getCommitteeEmployeeAssignments().get(8).getUniversityEmployees());
+        negativeCorrelation.addRelation(unsolved.getCommitteeEmployeeAssignments().get(13).getUniversityEmployees(),
+                                        unsolved.getCommitteeEmployeeAssignments().get(15).getUniversityEmployees());
+
+        positiveCorrelation.addRelation(unsolved.getCommitteeEmployeeAssignments().get(5).getUniversityEmployees(),
+                                        unsolved.getCommitteeEmployeeAssignments().get(7).getUniversityEmployees());
+        positiveCorrelation.addRelation(unsolved.getCommitteeEmployeeAssignments().get(12).getUniversityEmployees(),
+                                        unsolved.getCommitteeEmployeeAssignments().get(13).getUniversityEmployees());
+        positiveCorrelation.addRelation(unsolved.getCommitteeEmployeeAssignments().get(14).getUniversityEmployees(),
+                                        unsolved.getCommitteeEmployeeAssignments().get(15).getUniversityEmployees());
 
         SolverFactory<ComitteeSolution> solverFactory = SolverFactory.createFromXmlResource(
                 "config.xml");
@@ -45,14 +60,39 @@ public class Main {
 
         System.out.println("Final Score: " + solved.getScore());
 
-        for (Committee committee : solved.getCommittees()) {
-            System.out.println("Committee ID: " + committee.getId());
-            System.out.println("Assigned University Employees:");
-            for (UniversityEmployee employee : committee.getUniversityEmployees()) {
-                System.out.println("  - " + employee + " " + employee.getReviewedStudents());
+        printCommitteeDetails(solved);
+    }
+
+    public static void printCommitteeDetails(ComitteeSolution solution) {
+        for (Committee committee : solution.getCommittees()) {
+            System.out.println("Committee: " + committee.getName());
+            System.out.println("Assigned Employees:");
+
+            for (CommitteeEmployeeAssignment assignment : solution.getCommitteeEmployeeAssignments()) {
+                if (assignment.getCommittee() != null && assignment.getCommittee().equals(committee)) {
+                    UniversityEmployee employee = assignment.getUniversityEmployees();
+                    System.out.println("- " + employee.getFirstName() + " " + employee.getSecondName() +
+                            " (Habilitated: " + employee.isHabilitated() + ")" + employee.getTimeslotStart() + " - " + employee.getTimeslotEnd() + " duration:" + employee.getPreferredCommitteeDuration());
+                }
             }
+
+            System.out.println("Assigned Students:");
+
+            for (CommitteeEmployeeAssignment assignment : solution.getCommitteeEmployeeAssignments()) {
+                if (assignment.getCommittee() != null && assignment.getCommittee().equals(committee)) {
+                    List<Student> assignedStudents = assignment.getUniversityEmployees().getReviewedStudents();
+                    for (Student student : assignedStudents) {
+                        System.out.println("- " + student.getFirstName() + " " + student.getSecondName());
+                    }
+                }
+            }
+
             System.out.println();
         }
 
+        System.out.println("Unassigned Students:");
+        for (Student student : solution.getUnassignedStudents()) {
+            System.out.println("- " + student.getFirstName() + " " + student.getSecondName());
+        }
     }
 }
