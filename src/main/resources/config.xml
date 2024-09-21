@@ -1,5 +1,5 @@
 <solver>
-    <solutionClass>com.github.jbarus.solver.ComitteeSolution</solutionClass>
+    <solutionClass>com.github.jbarus.solver.CommitteeSolution</solutionClass>
     <entityClass>com.github.jbarus.solver.CommitteeEmployeeAssignment</entityClass>
     <scoreDirectorFactory>
         <constraintProviderClass>com.github.jbarus.solver.ComitteeSolutionConstraintProvider</constraintProviderClass>

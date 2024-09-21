@@ -5,8 +5,9 @@ import ai.timefold.solver.core.api.solver.SolverFactory;
 import com.github.jbarus.pojo.Committee;
 import com.github.jbarus.pojo.Student;
 import com.github.jbarus.pojo.UniversityEmployee;
-import com.github.jbarus.solver.ComitteeSolution;
+import com.github.jbarus.solver.CommitteeSolution;
 import com.github.jbarus.solver.CommitteeEmployeeAssignment;
+import com.github.jbarus.solver.SolverContext;
 import com.github.jbarus.structures.CorrelationMap;
 import com.github.jbarus.utils.DataLoader;
 import com.github.jbarus.utils.PrepareCommittee;
@@ -37,33 +38,36 @@ public class Main {
         hashMap2.put("DATA_DOSTEPNOSCI","2/1/24");
         List<List<String>> professors = DataLoader.loadData("C:\\Users\\Jakub\\Desktop\\GradMaster\\Materiały\\Profesorowie.xlsx",universityEmployeesColumns,List.of("NAZWISKO", "IMIE", "CZY_HABILITOWANY", "POCZATEK_DOSTEPNOSCI", "KONIEC_DOSTEPNOSCI", "DLUGOSC_KOMISJI"),hashMap2);
 
-        ComitteeSolution unsolved = PrepareCommittee.prepareCommittee(professors, students);
-        negativeCorrelation.addRelation(unsolved.getCommitteeEmployeeAssignments().get(0).getUniversityEmployees(),
+        CommitteeSolution unsolved = PrepareCommittee.prepareCommittee(professors, students);
+
+        SolverContext.getInstance().setUnsolvedSolution(unsolved);
+
+        SolverContext.getInstance().getNegativeCorrelation().addRelation(unsolved.getCommitteeEmployeeAssignments().get(0).getUniversityEmployees(),
                                         unsolved.getCommitteeEmployeeAssignments().get(1).getUniversityEmployees());
-        negativeCorrelation.addRelation(unsolved.getCommitteeEmployeeAssignments().get(6).getUniversityEmployees(),
+        SolverContext.getInstance().getNegativeCorrelation().addRelation(unsolved.getCommitteeEmployeeAssignments().get(6).getUniversityEmployees(),
                                         unsolved.getCommitteeEmployeeAssignments().get(8).getUniversityEmployees());
-        negativeCorrelation.addRelation(unsolved.getCommitteeEmployeeAssignments().get(13).getUniversityEmployees(),
+        SolverContext.getInstance().getNegativeCorrelation().addRelation(unsolved.getCommitteeEmployeeAssignments().get(13).getUniversityEmployees(),
                                         unsolved.getCommitteeEmployeeAssignments().get(15).getUniversityEmployees());
 
-        positiveCorrelation.addRelation(unsolved.getCommitteeEmployeeAssignments().get(5).getUniversityEmployees(),
+        SolverContext.getInstance().getPositiveCorrelation().addRelation(unsolved.getCommitteeEmployeeAssignments().get(5).getUniversityEmployees(),
                                         unsolved.getCommitteeEmployeeAssignments().get(7).getUniversityEmployees());
-        positiveCorrelation.addRelation(unsolved.getCommitteeEmployeeAssignments().get(12).getUniversityEmployees(),
+        SolverContext.getInstance().getPositiveCorrelation().addRelation(unsolved.getCommitteeEmployeeAssignments().get(12).getUniversityEmployees(),
                                         unsolved.getCommitteeEmployeeAssignments().get(13).getUniversityEmployees());
-        positiveCorrelation.addRelation(unsolved.getCommitteeEmployeeAssignments().get(14).getUniversityEmployees(),
+        SolverContext.getInstance().getPositiveCorrelation().addRelation(unsolved.getCommitteeEmployeeAssignments().get(14).getUniversityEmployees(),
                                         unsolved.getCommitteeEmployeeAssignments().get(15).getUniversityEmployees());
 
-        SolverFactory<ComitteeSolution> solverFactory = SolverFactory.createFromXmlResource(
+        SolverFactory<CommitteeSolution> solverFactory = SolverFactory.createFromXmlResource(
                 "config.xml");
-        Solver<ComitteeSolution> solver = solverFactory.buildSolver();
+        Solver<CommitteeSolution> solver = solverFactory.buildSolver();
 
-        ComitteeSolution solved = solver.solve(unsolved);
+        CommitteeSolution solved = solver.solve(unsolved);
 
         System.out.println("Final Score: " + solved.getScore());
 
         printCommitteeDetails(solved);
     }
 
-    public static void printCommitteeDetails(ComitteeSolution solution) {
+    public static void printCommitteeDetails(CommitteeSolution solution) {
         for (Committee committee : solution.getCommittees()) {
             System.out.println("Committee: " + committee.getName());
             System.out.println("Assigned Employees:");

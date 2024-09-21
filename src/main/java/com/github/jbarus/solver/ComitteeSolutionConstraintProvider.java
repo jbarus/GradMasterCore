@@ -25,8 +25,8 @@ public class ComitteeSolutionConstraintProvider implements ConstraintProvider {
         return constraintFactory.forEach(CommitteeEmployeeAssignment.class)
                 .groupBy(CommitteeEmployeeAssignment::getCommittee,
                         count())
-                .filter((committee, count) -> count > 3)
-                .penalize(HardSoftScore.ONE_HARD, (committee, count) -> count - 3)
+                .filter((committee, count) -> count != SolverContext.getInstance().getComitteeSize())
+                .penalize(HardSoftScore.ONE_HARD, (committee, count) -> Math.abs(count - SolverContext.getInstance().getComitteeSize()))
                 .asConstraint("Max 3 professors per committee");
     }
 
@@ -34,8 +34,8 @@ public class ComitteeSolutionConstraintProvider implements ConstraintProvider {
         return constraintFactory.forEach(CommitteeEmployeeAssignment.class)
                 .filter(assignment -> !assignment.getUniversityEmployees().isHabilitated())
                 .groupBy(CommitteeEmployeeAssignment::getCommittee, count())
-                .filter((assignment, count) -> count > 2)
-                .penalize(HardSoftScore.ONE_HARD, (committee, count) -> count - 2)
+                .filter((assignment, count) -> count > SolverContext.getInstance().getMaxNumberOfNonHabilitatedEmployees())
+                .penalize(HardSoftScore.ONE_HARD, (committee, count) -> count - SolverContext.getInstance().getMaxNumberOfNonHabilitatedEmployees())
                 .asConstraint("At least one habilitated professor per committee");
     }
 
@@ -44,7 +44,7 @@ public class ComitteeSolutionConstraintProvider implements ConstraintProvider {
                 .join(CommitteeEmployeeAssignment.class,
                         Joiners.equal(CommitteeEmployeeAssignment::getCommittee))
                 .filter((assignment1, assignment2) ->
-                        Main.negativeCorrelation.containsRelation(assignment1.getUniversityEmployees(), assignment2.getUniversityEmployees()))
+                        SolverContext.getInstance().getNegativeCorrelation().containsRelation(assignment1.getUniversityEmployees(), assignment2.getUniversityEmployees()))
                 .penalize( HardSoftScore.ONE_HARD).asConstraint("University employees who dislike each other shouldn’t be on the same committee.");
     }
 
@@ -53,7 +53,7 @@ public class ComitteeSolutionConstraintProvider implements ConstraintProvider {
                 .join(CommitteeEmployeeAssignment.class,
                         Joiners.equal(CommitteeEmployeeAssignment::getCommittee))
                 .filter((assignment1, assignment2) ->
-                        Main.positiveCorrelation.containsRelation(assignment1.getUniversityEmployees(), assignment2.getUniversityEmployees()))
+                        SolverContext.getInstance().getPositiveCorrelation().containsRelation(assignment1.getUniversityEmployees(), assignment2.getUniversityEmployees()))
                 .reward( HardSoftScore.ONE_HARD).asConstraint("University employees who like each other should be on the same committee.");
     }
 

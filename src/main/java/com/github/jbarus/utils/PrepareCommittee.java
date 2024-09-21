@@ -3,8 +3,9 @@ package com.github.jbarus.utils;
 import com.github.jbarus.pojo.Committee;
 import com.github.jbarus.pojo.Student;
 import com.github.jbarus.pojo.UniversityEmployee;
-import com.github.jbarus.solver.ComitteeSolution;
+import com.github.jbarus.solver.CommitteeSolution;
 import com.github.jbarus.solver.CommitteeEmployeeAssignment;
+import com.github.jbarus.solver.SolverContext;
 
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -15,7 +16,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class PrepareCommittee {
-    public static ComitteeSolution prepareCommittee(List<List<String>> universityEmployees, List<List<String>> students) {
+    public static CommitteeSolution prepareCommittee(List<List<String>> universityEmployees, List<List<String>> students) {
         List<UniversityEmployee> universityEmployeesObjects = universityEmployees.stream().map(entry ->
                 new UniversityEmployee(
                         entry.get(1),
@@ -44,7 +45,7 @@ public class PrepareCommittee {
         for (Map.Entry<String, List<Student>> entry : professorToStudentsMap.entrySet()) {
             unallocatedStudents.addAll(entry.getValue());
         }
-        ComitteeSolution comitteeSolution = new ComitteeSolution();
+        CommitteeSolution committeeSolution = new CommitteeSolution();
         List<CommitteeEmployeeAssignment> committeeEmployeeAssignmentList = new ArrayList<>();
         for (UniversityEmployee universityEmployeesObject : universityEmployeesObjects) {
             CommitteeEmployeeAssignment committeeEmployeeAssignment = new CommitteeEmployeeAssignment();
@@ -52,13 +53,14 @@ public class PrepareCommittee {
             committeeEmployeeAssignmentList.add(committeeEmployeeAssignment);
         }
         List<Committee>committees = new ArrayList<>();
-        for (int i = 0; i < universityEmployeesObjects.size()/3; i++) {
+        for (int i = 0; i < universityEmployeesObjects.size()/ SolverContext.getInstance().getComitteeSize(); i++) {
             committees.add(new Committee("Committee " + i));
         }
-        comitteeSolution.setCommittees(committees);
-        comitteeSolution.setCommitteeEmployeeAssignments(committeeEmployeeAssignmentList);
-        comitteeSolution.setUnassignedStudents(unallocatedStudents);
-        return comitteeSolution;
+
+        committeeSolution.setCommittees(committees);
+        committeeSolution.setCommitteeEmployeeAssignments(committeeEmployeeAssignmentList);
+        committeeSolution.setUnassignedStudents(unallocatedStudents);
+        return committeeSolution;
     }
 
     private static boolean convertStringToBoolean(String booleanValue) {

@@ -7,7 +7,6 @@ import ai.timefold.solver.core.api.domain.valuerange.ValueRangeProvider;
 import ai.timefold.solver.core.api.score.buildin.hardsoft.HardSoftScore;
 import com.github.jbarus.pojo.Committee;
 import com.github.jbarus.pojo.Student;
-import com.github.jbarus.pojo.UniversityEmployee;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,7 +15,7 @@ import java.util.List;
 @PlanningSolution
 @Getter
 @Setter
-public class ComitteeSolution {
+public class CommitteeSolution {
     @ValueRangeProvider(id = "committeeRange")
     private List<Committee> committees;
     @PlanningEntityCollectionProperty
@@ -26,10 +25,10 @@ public class ComitteeSolution {
 
     private List<Student> unassignedStudents;
 
-    public ComitteeSolution() {
+    public CommitteeSolution() {
     }
 
-    public ComitteeSolution(List<Committee> committees, List<CommitteeEmployeeAssignment> committeeEmployeeAssignments) {
+    public CommitteeSolution(List<Committee> committees, List<CommitteeEmployeeAssignment> committeeEmployeeAssignments) {
         this.committees = committees;
         this.committeeEmployeeAssignments = committeeEmployeeAssignments;
     }
