@@ -1,15 +1,15 @@
-package com.github.jbarus.solver;
+
+package com.github.jbarus.gradmastercore.solver;
 
 import ai.timefold.solver.core.api.domain.entity.PlanningEntity;
 import ai.timefold.solver.core.api.domain.lookup.PlanningId;
-import ai.timefold.solver.core.api.domain.variable.PlanningListVariable;
 import ai.timefold.solver.core.api.domain.variable.PlanningVariable;
-import com.github.jbarus.pojo.Committee;
-import com.github.jbarus.pojo.UniversityEmployee;
+import com.github.jbarus.gradmastercore.models.Committee;
+import com.github.jbarus.gradmastercore.models.UniversityEmployee;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.*;
+import java.util.UUID;
 
 @PlanningEntity
 @Getter
@@ -49,3 +49,4 @@ public class CommitteeEmployeeAssignment {
                 '}';
     }
 }
+

@@ -1,4 +1,4 @@
-package com.github.jbarus.structures;
+package com.github.jbarus.gradmastercore.structures;
 
 import java.util.HashMap;
 

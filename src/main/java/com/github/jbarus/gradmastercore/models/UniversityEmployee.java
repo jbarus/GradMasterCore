@@ -1,10 +1,9 @@
-package com.github.jbarus.pojo;
+package com.github.jbarus.gradmastercore.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.Duration;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,24 +19,25 @@ public class UniversityEmployee {
     private LocalTime timeslotStart;
     private LocalTime timeslotEnd;
     private int preferredCommitteeDuration;
+    @JsonIgnore
     private List<Student> reviewedStudents = new ArrayList<>();
 
-    public UniversityEmployee(String firstName, String secondName, boolean isHabilitated, LocalTime timeslotStart, LocalTime timeslotEnd, int preferredCommitteeDuration) {
-        this.id = UUID.randomUUID();
+    public UniversityEmployee(UUID id, String firstName, String secondName, boolean isHabilitated, LocalTime timeslotStart, LocalTime timeslotEnd, int preferredCommitteeDuration, List<Student> reviewedStudents) {
+        this.id = id;
         this.firstName = firstName;
         this.secondName = secondName;
         this.isHabilitated = isHabilitated;
         this.timeslotStart = timeslotStart;
         this.timeslotEnd = timeslotEnd;
         this.preferredCommitteeDuration = preferredCommitteeDuration;
+        this.reviewedStudents = reviewedStudents;
     }
 
-    public Duration getTimeslotDuration() {
-        return Duration.between(timeslotStart, timeslotEnd);
+    public UniversityEmployee(String firstName, String secondName, boolean isHabilitated, LocalTime timeslotStart, LocalTime timeslotEnd, int preferredCommitteeDuration, List<Student> reviewedStudents) {
+        this(UUID.randomUUID(), firstName, secondName,isHabilitated,timeslotStart, timeslotEnd, preferredCommitteeDuration, reviewedStudents);
     }
 
-    public int getTotalReviewTime() {
-        return reviewedStudents.size() * preferredCommitteeDuration;
+    public UniversityEmployee() {
     }
 
     @Override
@@ -66,7 +66,11 @@ public class UniversityEmployee {
                 "id=" + id +
                 ", firstName='" + firstName + '\'' +
                 ", secondName='" + secondName + '\'' +
-                ", isHabilitated='" + isHabilitated + '\'' +
+                ", isHabilitated=" + isHabilitated +
+                ", timeslotStart=" + timeslotStart +
+                ", timeslotEnd=" + timeslotEnd +
+                ", preferredCommitteeDuration=" + preferredCommitteeDuration +
+                ", reviewedStudents=" + reviewedStudents +
                 '}';
     }
 }

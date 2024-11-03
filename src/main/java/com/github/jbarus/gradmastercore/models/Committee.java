@@ -1,4 +1,4 @@
-package com.github.jbarus.pojo;
+package com.github.jbarus.gradmastercore.models;
 
 import lombok.Getter;
 import lombok.Setter;

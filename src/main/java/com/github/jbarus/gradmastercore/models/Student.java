@@ -1,7 +1,12 @@
-package com.github.jbarus.pojo;
+package com.github.jbarus.gradmastercore.models;
+
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.UUID;
 
+@Getter
+@Setter
 public class Student {
     private UUID id;
     private String firstName;
@@ -14,33 +19,10 @@ public class Student {
     }
 
     public Student(String firstName, String secondName) {
-        this.id = UUID.randomUUID();
-        this.firstName = firstName;
-        this.secondName = secondName;
+        this(UUID.randomUUID(), firstName, secondName);
     }
 
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getSecondName() {
-        return secondName;
-    }
-
-    public void setSecondName(String secondName) {
-        this.secondName = secondName;
+    public Student() {
     }
 
     @Override

@@ -1,12 +1,12 @@
-package com.github.jbarus.solver;
+package com.github.jbarus.gradmastercore.solver;
 
 import ai.timefold.solver.core.api.domain.solution.PlanningEntityCollectionProperty;
 import ai.timefold.solver.core.api.domain.solution.PlanningScore;
 import ai.timefold.solver.core.api.domain.solution.PlanningSolution;
 import ai.timefold.solver.core.api.domain.valuerange.ValueRangeProvider;
 import ai.timefold.solver.core.api.score.buildin.hardsoft.HardSoftScore;
-import com.github.jbarus.pojo.Committee;
-import com.github.jbarus.pojo.Student;
+import com.github.jbarus.gradmastercore.models.Committee;
+import com.github.jbarus.gradmastercore.models.Student;
 import lombok.Getter;
 import lombok.Setter;
 
