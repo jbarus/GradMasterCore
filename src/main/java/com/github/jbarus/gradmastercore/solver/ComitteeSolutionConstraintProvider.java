@@ -48,13 +48,34 @@ public class ComitteeSolutionConstraintProvider implements ConstraintProvider {
                 .penalize( HardSoftScore.ONE_HARD).asConstraint("University employees who dislike each other shouldn’t be on the same committee.");
     }
 
-    private Constraint preferLikedWorkersInCommittee(ConstraintFactory constraintFactory) {
+    /*private Constraint preferLikedWorkersInCommittee(ConstraintFactory constraintFactory) {
         return constraintFactory.forEach(CommitteeEmployeeAssignment.class)
                 .join(CommitteeEmployeeAssignment.class,
                         Joiners.equal(CommitteeEmployeeAssignment::getCommittee))
                 .filter((assignment1, assignment2) ->
                         Problem.getCurrentInstance().getPositiveCorrelation().containsRelation(assignment1.getUniversityEmployees(), assignment2.getUniversityEmployees()))
-                .reward( HardSoftScore.ONE_HARD).asConstraint("University employees who like each other should be on the same committee.");
+                .reward(HardSoftScore.ONE_SOFT).asConstraint("University employees who like each other should be on the same committee.");
+    }*/
+
+    /*private Constraint preferLikedWorkersInCommittee(ConstraintFactory constraintFactory) {
+        return constraintFactory.forEach(CommitteeEmployeeAssignment.class)
+                .join(CommitteeEmployeeAssignment.class)
+                .filter((assignment1, assignment2) -> !assignment1.equals(assignment2))
+                .filter((assignment1, assignment2) ->
+                        Problem.getCurrentInstance().getPositiveCorrelation().containsRelation(assignment1.getUniversityEmployees(), assignment2.getUniversityEmployees()))
+                .penalize( HardSoftScore.ONE_HARD).asConstraint("University employees who like each other should be on the same committee.");
+    }*/
+
+    private Constraint preferLikedWorkersInCommittee(ConstraintFactory constraintFactory) {
+        return constraintFactory.forEach(CommitteeEmployeeAssignment.class)
+                .join(CommitteeEmployeeAssignment.class)
+                .filter((assignment1, assignment2) ->
+                        !assignment1.equals(assignment2) &&
+                                !assignment1.getCommittee().equals(assignment2.getCommittee()) &&
+                                Problem.getCurrentInstance()
+                                        .getPositiveCorrelation()
+                                        .containsRelation(assignment1.getUniversityEmployees(), assignment2.getUniversityEmployees()))
+                .penalize( HardSoftScore.ONE_HARD).asConstraint("University employees who like each other should be on the same committee.");
     }
 
     private Constraint validateCommitteeTimeAndStudentLoad(ConstraintFactory constraintFactory) {
